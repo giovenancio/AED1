@@ -1,0 +1,39 @@
+#include <stdio.h>
+#include <string.h>
+
+int calcular_hash(char string[]) {
+    int valor_total = 0;
+    int i = 0;
+    while (string[i] != "\0") {
+        int valor_letra = string[i] - 65;
+        valor_total += valor_letra + i;
+        i++;
+}
+
+return valor_total;
+ 
+    
+}
+
+int main() {
+    int num_casos_teste;
+    scanf("%d", &num_casos_teste);
+    
+    for (int i = 0; i < num_casos_teste; i++) {
+        int num_linhas;
+        scanf("%d", &num_linhas);
+        
+        int valor_hash = 0;
+        
+        for(int j = 0; j < num_linhas; j++) {
+            char linha[51];
+            scanf("%s", linha);
+            valor_hash += calcular_hash(linha);
+        }
+        
+        printf("%d\n" , valor_hash);
+        
+    }
+    
+    return 0;
+}
