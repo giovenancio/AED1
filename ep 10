@@ -1,0 +1,92 @@
+Ep 10 
+
+
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_CITIES 1000
+
+// Estrutura para representar uma rota
+typedef struct {
+    int cityA;
+    int cityB;
+} Route;
+
+// Função para buscar o menor número de horas necessário para ir de Curytyba para Riacho de Fevereiro
+int menorNumeroHoras(int N, int M, Route* routes, int C, int R, int E) {
+    int i, j;
+
+    // Cria uma matriz de adjacência para representar as rotas entre as cidades
+    int adjMatrix[MAX_CITIES][MAX_CITIES] = {0};
+
+    for (i = 0; i < M; i++) {
+        int cityA = routes[i].cityA;
+        int cityB = routes[i].cityB;
+        adjMatrix[cityA][cityB] = 1;
+        adjMatrix[cityB][cityA] = 1;
+    }
+
+    // Vetor para marcar as cidades visitadas durante a busca em largura
+    int visited[MAX_CITIES] = {0};
+
+    // Vetor para armazenar a distância entre Curytyba e cada cidade
+    int distancia[MAX_CITIES];
+
+    // Inicializa a distância de todas as cidades com um valor muito grande
+    for (i = 1; i <= N; i++) {
+        distancia[i] = MAX_CITIES + 1;
+    }
+
+    // Curytyba está a uma distância de 0 horas de si mesma
+    distancia[C] = 0;
+
+    // Fila para a busca em largura
+    int fila[MAX_CITIES];
+    int inicioFila = 0;
+    int fimFila = 0;
+
+    // Insere Curytyba na fila
+    fila[fimFila++] = C;
+    visited[C] = 1;
+
+    // Realiza a busca em largura
+    while (inicioFila != fimFila) {
+        int cidadeAtual = fila[inicioFila++];
+        for (j = 1; j <= N; j++) {
+            if (adjMatrix[cidadeAtual][j] && !visited[j]) {
+                // Encontrou uma rota para uma cidade vizinha não visitada
+                fila[fimFila++] = j;
+                visited[j] = 1;
+                distancia[j] = distancia[cidadeAtual] + 1;
+            }
+        }
+    }
+
+    return distancia[R];
+}
+
+int main() {
+    int N, M, C, R, E;
+    Route routes[MAX_CITIES];
+    
+    // Loop para processar vários casos de teste
+    while (scanf("%d %d", &N, &M) != EOF) {
+        // Leitura das rotas
+        int i;
+        for (i = 0; i < M; i++) {
+            scanf("%d %d", &routes[i].cityA, &routes[i].cityB);
+        }
+        
+        // Leitura das cidades
+        scanf("%d %d %d", &C, &R, &E);
+        
+        // Chamada da função para determinar o menor número de horas
+        int horas = menorNumeroHoras(N, M, routes, C, R, E);
+        
+        // Impressão do resultado
+        printf("%d\n", horas);
+    }
+    
+    return 0;
+}
